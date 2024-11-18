@@ -18,10 +18,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 app_1.default.post('/jobMatch', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { input } = req.body;
-    const prompt = `Você é um desenvolvedor júnior com habilidades em Node.js, NestJS, TypeScript, React, SQL, Git, Docker, CI/CD, e práticas ágeis como Scrum e Itil. Dada a descrição completa da vaga abaixo, identifique as habilidades mencionadas e gere uma resposta que mostre sua experiência como candidato ideal para a vaga. E se por acaso houver habilidades nas quais você não domina, argumente da melhor forma que puder garantindo sua softskill em aprender rápido, frisando possibilidades de transferência de habilidades.
+    const { input, lang } = req.body;
+    const prompt = `Você é um desenvolvedor júnior com habilidades em Node.js, NestJS, TypeScript, React, SQL, AWS, Google Cloud, Git, Docker, CI/CD, e práticas ágeis como Scrum e Itil. Dada a descrição completa da vaga abaixo, identifique as habilidades mencionadas e gere uma resposta que mostre sua experiência como candidato ideal para a vaga. E se por acaso houver habilidades que você não domina, argumente da melhor forma que puder garantindo sua softskill em aprender rápido, frisando possibilidades de transferência de habilidades.
         Descrição da Vaga: "${input}"
-        Obs.: Seu texto será apresentado diretamente ao recrutador, portanto, não mande instruções genéricas como por exemplo, me mandar citar projetos pessoais, resultados ou coisas semelhantes.`;
+        Obs.: Seu texto será apresentado diretamente ao recrutador, portanto, não mande instruções genéricas como por exemplo, me mandar citar projetos pessoais, resultados ou coisas semelhantes. Evite também deixar espaços em branco e/ou abertos para que eu edite de alguma forma. LEMBRE-SE SUA RESPOSTA APARECERÁ AUTOMATICAMENTE PARA O RECRUTADOR. Responda em ${lang}`;
     try {
         const response = yield axios_1.default.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
             contents: [
@@ -40,7 +40,6 @@ app_1.default.post('/jobMatch', (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(200).send(generatedText.trim());
     }
     catch (error) {
-        console.error("Erro ao chamar a API do Gemini:", error);
         res.status(500).json({ message: "Houve um erro ao processar sua solicitação. Tente novamente mais tarde.", error });
     }
 }));
